@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <h:form id="frmcell"> 
+            <p:messages  autoUpdate="true" />
+            <p:commandButton value="ADD NEW CELL" action="#{cellmodel.clearme()}" oncomplete="PF('dialogcell').show();" />
+            <p:commandButton value="ADD factors to cell" action="factorcell.xhtml"  />
+            <p:dataTable value="#{cellmodel.findall()}" var="obj" >
+                <p:column headerText="ID">
+                    #{obj.celid}
+                </p:column>  
+                <p:column headerText="minlat">
+                    #{obj.minlat}
+                </p:column>
+                <p:column headerText="minlong">
+                    #{obj.minlong}
+                </p:column>
+                <p:column headerText="maxlat">
+                    #{obj.maxlat}
+                </p:column>
+                <p:column headerText="maxlong">
+                    #{obj.maxlong}
+                </p:column>
+                <p:column headerText="EDIT">
+                    <p:commandButton value="Edit" oncomplete="PF('dialogupdate').show();">
+                        <f:setPropertyActionListener target="#{cellmodel.cell}" value="#{obj}"  />
+                    </p:commandButton>
+                </p:column>
+                <p:column headerText="DELETE">
+                    <center>
+                        <p:commandButton value="Delete" action="#{cellmodel.delete()}" update=":frmcell" >
+                            <f:setPropertyActionListener target="#{cellmodel.cell}" value="#{obj}" />
+                            <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert" />
+                        </p:commandButton>
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        </p:confirmDialog>
+                    </center>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+        <h:form id="frmd1">
+            <p:dialog header="add new cell" widgetVar="dialogcell" modal="true">
+                <p:panel id="panelcell">
+                    <p:outputPanel autoUpdate="true">
+                        <h:panelGrid columns="2" cellpadding="10px">
+                            <p:outputLabel value="minlat" />
+                            <p:inputText value="#{cellmodel.cell.minlat}" />
+                            <p:outputLabel value="minlong" />
+                            <p:inputText value="#{cellmodel.cell.minlong}" />
+                            <p:outputLabel value="maxlat" />
+                            <p:inputText value="#{cellmodel.cell.maxlat}" />
+                            <p:outputLabel value="maxlong" />
+                            <p:inputText value="#{cellmodel.cell.maxlong}" />
+                        </h:panelGrid>
+                        <p:separator/>
+                        <center>
+                            <h:panelGrid columns="2">
+                                <p:commandButton value="ADD" action="#{cellmodel.addcell()}" update=":frmcell" oncomplete="PF('dialogcell').hide();" />
+                                <p:commandButton value="clear"  />
+                            </h:panelGrid>
+                        </center>
+                    </p:outputPanel>
+                </p:panel>
+            </p:dialog>
+        </h:form>
+        <h:form >
+            <p:dialog widgetVar="dialogupdate" header="EDIT CELL" modal="true">
+                <p:panel>
+                    <p:outputPanel autoUpdate="true">
+                        <h:panelGrid columns="2" cellpadding="10px" >
+                            <p:outputLabel value="minlat" />
+                            <p:inputText value="#{cellmodel.cell.minlat}" />
+                            <p:outputLabel value="minlong" />
+                            <p:inputText value="#{cellmodel.cell.minlong}" />
+                            <p:outputLabel value="maxlat" />
+                            <p:inputText value="#{cellmodel.cell.maxlat}" />
+                            <p:outputLabel value="maxlong" />
+                            <p:inputText value="#{cellmodel.cell.maxlong}" />
+                        </h:panelGrid>
+                        <p:separator/>
+                        <h:panelGrid>
+                            <p:commandButton value="EDIT" action="#{cellmodel.update()}" update=":frmcell" />
+                        </h:panelGrid>
+                    </p:outputPanel>
+                </p:panel>
+            </p:dialog>
+        </h:form>
+    </h:body>
+
+</html>
+
